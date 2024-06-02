@@ -25,6 +25,7 @@ stage("Test")
 {
 steps
 {
+git 'https://github.com/anishasaini/anisha_demo_repo1.git'
 bat 'mvn clean install'
 }
 }
@@ -32,14 +33,14 @@ stage("Testing value")
 {
 steps
 {
+git 'https://github.com/anishasaini/anisha_demo_repo1.git'
 bat 'mvn test'
 }
 }
 stage("complete")
+{steps
 {
-steps
-{
-echo 'Success'
+echo 'done'
 }
 }
 }
