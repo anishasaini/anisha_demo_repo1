@@ -37,6 +37,8 @@ bat 'mvn test'
 }
 stage("complete")
 {
+steps
+{
 echo 'Success'
 }
 }
