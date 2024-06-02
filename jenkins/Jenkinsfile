@@ -1,0 +1,41 @@
+pipeline
+{
+agent any
+environment {
+        GIT_CREDENTIALS = credentials('3f77cbf7-02ec-42d7-968d-99db6c9c2602')
+    }
+    tools
+    {maven 'Maven_home'}
+stages
+{
+stage("Clean Up")
+{
+steps
+{deleteDir()}
+}
+stage("Build")
+{
+steps
+{
+    withMaven(maven: 'Maven_home') {
+bat 'mvn --version'}
+}
+}
+stage("Test")
+{
+steps
+{
+git 'https://github.com/anishasaini/anisha_demo_repo1.git'
+bat 'mvn clean install'
+}
+}
+stage("Testing value")
+{
+steps
+{
+git 'https://github.com/anishasaini/anisha_demo_repo1.git'
+bat 'mvn test'
+}
+}
+}
+}
