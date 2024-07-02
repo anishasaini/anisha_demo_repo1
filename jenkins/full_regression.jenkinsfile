@@ -5,7 +5,7 @@ def GRADLE_SUITE_OPTIONS=[
 [suite:'analyticsMulti',env:'anm',default:true],
 [suite:'analyticsSingle',env:'ans',default:true],
 [suite:'canvasSingle',env:'cns',default:true],
-[suite:'canvasMulti',env:'cnm',default:true],
+[suite:'canvasMulti',env:'cnm',default:true]
 ]
 def ES_RUN_INCLUDED=[
 'analyticsMulti',
@@ -62,6 +62,5 @@ env.ENVIRONMENT_NAME=params?.ENVIRONMENT?.LowerCase()?:env.BUILD_USER
 }
 }
 }
-
 }
 }
