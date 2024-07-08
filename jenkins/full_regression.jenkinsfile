@@ -35,6 +35,7 @@ parameters(jobParameters)
 ])
 
 pipeline{
+agent any
 stages{
 stage('Initialize parallel E2E Test Run'){
 steps{
