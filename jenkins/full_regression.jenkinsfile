@@ -45,7 +45,7 @@ daysToKeepStr:'30'))}
 agent
 {
 docker{
-image '/jenkins/agent:latest'
+image 'jenkins/agent:latest'
 args '-u root:root'
 }}
 
