@@ -1,6 +1,3 @@
-
-Utilities utils=new Utilities()
-
 def GRADLE_SUITE_OPTIONS=[
 [suite:'analyticsMulti',env:'anm',default:true],
 [suite:'analyticsSingle',env:'ans',default:true],
@@ -36,30 +33,3 @@ GRADLE_SUITE_OPTIONS.each{def suite ->
 properties([
 parameters(jobParameters)
 ])
-
-pipeline{
-options{
-timestamps()
-ansiColor('xterm')
-buildDiscarder(
-logRotator(
-daysToKeepStr:'30'))}
-
-agent
-{
-docker{
-image '/jenkins/agent:latest'
-args '-u root:root'
-}}
-
-stages{
-stage('Initialize parallel E2E Test Run'){
-steps{
-script{
-env.BUILD_USER=utils.getBuildUser()
-env.ENVIRONMENT_NAME=params?.ENVIRONMENT?.LowerCase()?:env.BUILD_USER
-}
-}
-}
-}
-}
