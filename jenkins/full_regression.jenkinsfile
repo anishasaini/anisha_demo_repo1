@@ -40,7 +40,7 @@ stages{
 stage('Initialize parallel E2E Test Run'){
 steps{
 script{
-env.ENVIRONMENT_NAME=params?.ENVIRONMENT?.LowerCase()?:env.BUILD_USER
+env.ENVIRONMENT_NAME=params?.ENVIRONMENT?.toLowerCase()?:env.BUILD_USER
 }
 }
 }
