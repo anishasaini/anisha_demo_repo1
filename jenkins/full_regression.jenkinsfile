@@ -19,13 +19,14 @@ def MULTI_THREAD_SUITES=[
 def SUITES_RAN=[]
 
 def jobParameters=[
-//separator(name:'E2E Test Environment Details',sectionHeader:'E2E Test Environment Details'),
+separator(name:'E2E Test Environment Details',sectionHeader:'E2E Test Environment Details'),
 string(name:'DEPLOY_BRANCH',defaultValue:env.BRANCH_NAME.contains('RELEASE')?env.BRANCH_NAME:'main',description:'The version of deployment job <a href="https://jenkins.aws.chdev.nuix.com/job/Investigate/job/Environments/job/Deploy/">Deploy</a> to use.'),
 string(name:'INVESTIGATE_BRANCH',defaultValue:'',description:'The version of investigste under test'),
 string(name:'SHARED_SERVICES_INSTALLER_REVISION',defaultValue:'main',description:'Version of share services installer to use.'),
 string(name:'ENVIRONMENT',defaultValue:'',description:'Testing environment name.If blank your chdev username will be used.'),
 choice(name:'OS',choices:['windows-2022','windows-2019','windows-2016-standard','ubuntu-20.04','ubuntu-18.04','debian-10','debian-11'],description:'Operating System'),
 choice(name:'Region',choices:['us-east-1','ap-southeast2'],description:'AWS Deployment Region'),
+separator(name: "end"),
 ]
 GRADLE_SUITE_OPTIONS.each{def suite ->
            jobParameters.add(booleanParam(name:"RUN_${suite.suite}",defaultValue:"${suite.defaultValue}",description:"set to false do exclude ${suite.suite} from parallel run test suites."),)
