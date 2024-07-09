@@ -1,8 +1,8 @@
 def GRADLE_SUITE_OPTIONS=[
-[suite:'analyticsMulti',env:'anm',default:true],
-[suite:'analyticsSingle',env:'ans',default:true],
-[suite:'canvasSingle',env:'cns',default:true],
-[suite:'canvasMulti',env:'cnm',default:true]
+[suite:'analyticsMulti',env:'anm',defaultValue:true],
+[suite:'analyticsSingle',env:'ans',defaultValue:true],
+[suite:'canvasSingle',env:'cns',defaultValue:true],
+[suite:'canvasMulti',env:'cnm',defaultValue:true]
 ]
 def ES_RUN_INCLUDED=[
 'analyticsMulti',
