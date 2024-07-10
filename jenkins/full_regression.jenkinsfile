@@ -58,9 +58,9 @@ parallel(
 if(params."RUN_${suite.suite}"){
 echo "${suite.suite}"
 build job: 'mom test', parameters:[[$class:'BooleanParameterValue', name:'myVariable', value:false]]
-}
-}
-)
+                               }
+                  },
+        )
 }
 }
 }
