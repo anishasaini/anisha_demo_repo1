@@ -66,4 +66,11 @@ build job: 'mom test', parameters:[[$class:'BooleanParameterValue', name:'myVari
 }
 }
 }
+post{
+always{
+script{
+echo "Finally reached"
+}
+}
+}
 }
