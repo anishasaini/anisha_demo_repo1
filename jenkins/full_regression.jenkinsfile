@@ -60,7 +60,6 @@ echo "${suite.suite}"
 build job: 'mom test',parameters:[booleanParam(name:'myVariable', value:false)],wait:false
                                }
                   }
-                  parallel SUITES_TO_RUN
        //)
  //}
 }
