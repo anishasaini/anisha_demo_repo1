@@ -59,9 +59,9 @@ if(params."RUN_${suite.suite}"){
 echo "${suite.suite}"
 build job: 'mom test',wait: false,parameters:[booleanParam(name:'myVariable', value:false)]
                                }
-                  }
+                 // }
        )
- //}
+ }
 }
 }
 }}
