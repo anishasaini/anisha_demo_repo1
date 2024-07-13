@@ -57,9 +57,10 @@ SUITES_TO_RUN.each{def suite->
 //"${suite.suite}":{
 if(params."RUN_${suite.suite}"){
 echo "${suite.suite}"
-build job: 'mom test',parameters:[booleanParam(name:'myVariable', value:false)]
+build job: 'mom test',parameters:[booleanParam(name:'myVariable', value:false)],wait:false
                                }
                   }
+                  parallel SUITES_TO_RUN
        //)
  //}
 }
