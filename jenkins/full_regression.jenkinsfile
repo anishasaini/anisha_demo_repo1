@@ -44,7 +44,7 @@ script{
 env.ENVIRONMENT_NAME=params?.ENVIRONMENT?.toLowerCase()?:env.BUILD_USER
 echo "${env.ENVIRONMENT_NAME}"
 echo "${env.BUILD_USER}"
-}
+}'l, ?////////'
 }
 }
 stage('Trigger Parallel Runs')
@@ -60,6 +60,7 @@ echo "${suite.suite}"
 build (
 job: 'mom test',
  parameters:[booleanParam(name:'myVariable', value:false)],
+ quietPeriod: 2,
  wait: false
        )
                                }
