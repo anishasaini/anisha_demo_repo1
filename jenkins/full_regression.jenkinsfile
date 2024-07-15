@@ -52,16 +52,20 @@ stage('Trigger Parallel Runs')
 steps{
 script{
 def SUITES_TO_RUN=GRADLE_SUITE_OPTIONS
+def parallelJobs = [:]
 SUITES_TO_RUN.each{def suite->
-parallel(
-"${suite.suite}":{
 if(params."RUN_${suite.suite}"){
+parallelJobs[suite.suite] = {
 echo "${suite.suite}"
 build job: 'mom test',parameters:[booleanParam(name:'myVariable', value:false)],wait:false
                                }
                   }
-       )
  }
+ if (parallelJobs.isEmpty()) {
+                         echo "No suites to run."
+                     } else {
+                         parallel parallelJobs
+                     }
 }
 }
 }}
