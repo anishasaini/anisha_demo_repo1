@@ -61,6 +61,7 @@ build job: 'mom test',wait:false,parameters:[booleanParam(name:'myVariable', val
                                }
                   }
  }
+ echo "parallelJobs: ${parallelJobs}"
  if (parallelJobs.isEmpty()) {
                          echo "No suites to run."
                      } else {
