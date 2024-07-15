@@ -58,6 +58,7 @@ if(params."RUN_${suite.suite}"){
 parallelJobs[suite.suite] = {
 echo "${suite.suite}"
 build job: 'mom test',wait:false,parameters:[booleanParam(name:'myVariable', value:false)]
+  echo "Job for suite: ${suite.suite} has been triggered."
                                }
                   }
  }
