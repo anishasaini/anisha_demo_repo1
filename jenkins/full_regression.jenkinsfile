@@ -1,81 +1,81 @@
-def GRADLE_SUITE_OPTIONS = [
-    [suite: 'analyticsMulti', env: 'anm', defaultValue: true],
-    [suite: 'analyticsSingle', env: 'ans', defaultValue: true],
-    [suite: 'canvasSingle', env: 'cns', defaultValue: true],
-    [suite: 'canvasMulti', env: 'cnm', defaultValue: true]
+def GRADLE_SUITE_OPTIONS=[
+[suite:'analyticsMulti',env:'anm',defaultValue:true],
+[suite:'analyticsSingle',env:'ans',defaultValue:true],
+[suite:'canvasSingle',env:'cns',defaultValue:true],
+[suite:'canvasMulti',env:'cnm',defaultValue:true]
+]
+def ES_RUN_INCLUDED=[
+'analyticsMulti',
+'analyticsSingle',
+'canvasSingle',
+'canvasMulti'
 ]
 
-def jobParameters = [
-    separator(name: 'E2E Test Environment Details', sectionHeader: 'E2E Test Environment Details'),
-    string(name: 'DEPLOY_BRANCH', defaultValue: env.BRANCH_NAME.contains('RELEASE') ? env.BRANCH_NAME : 'main', description: 'The version of deployment job <a href="https://jenkins.aws.chdev.nuix.com/job/Investigate/job/Environments/job/Deploy/">Deploy</a> to use.'),
-    string(name: 'INVESTIGATE_BRANCH', defaultValue: '', description: 'The version of investigate under test'),
-    string(name: 'SHARED_SERVICES_INSTALLER_REVISION', defaultValue: 'main', description: 'Version of share services installer to use.'),
-    string(name: 'ENVIRONMENT', defaultValue: '', description: 'Testing environment name. If blank, your chdev username will be used.'),
-    choice(name: 'OS', choices: ['windows-2022', 'windows-2019', 'windows-2016-standard', 'ubuntu-20.04', 'ubuntu-18.04', 'debian-10', 'debian-11'], description: 'Operating System'),
-    choice(name: 'Region', choices: ['us-east-1', 'ap-southeast-2'], description: 'AWS Deployment Region'),
-    separator(name: "end"),
+def MULTI_THREAD_SUITES=[
+'analyticsMulti',
+'canvasMulti'
 ]
 
-GRADLE_SUITE_OPTIONS.each { def suite ->
-    jobParameters.add(booleanParam(name: "RUN_${suite.suite}", defaultValue: suite.defaultValue, description: "Set to false to exclude ${suite.suite} from parallel run test suites."))
+def SUITES_RAN=[]
+
+def jobParameters=[
+separator(name:'E2E Test Environment Details',sectionHeader:'E2E Test Environment Details'),
+string(name:'DEPLOY_BRANCH',defaultValue:env.BRANCH_NAME.contains('RELEASE')?env.BRANCH_NAME:'main',description:'The version of deployment job <a href="https://jenkins.aws.chdev.nuix.com/job/Investigate/job/Environments/job/Deploy/">Deploy</a> to use.'),
+string(name:'INVESTIGATE_BRANCH',defaultValue:'',description:'The version of investigste under test'),
+string(name:'SHARED_SERVICES_INSTALLER_REVISION',defaultValue:'main',description:'Version of share services installer to use.'),
+string(name:'ENVIRONMENT',defaultValue:'',description:'Testing environment name.If blank your chdev username will be used.'),
+choice(name:'OS',choices:['windows-2022','windows-2019','windows-2016-standard','ubuntu-20.04','ubuntu-18.04','debian-10','debian-11'],description:'Operating System'),
+choice(name:'Region',choices:['us-east-1','ap-southeast2'],description:'AWS Deployment Region'),
+separator(name: "end"),
+]
+GRADLE_SUITE_OPTIONS.each{def suite ->
+           jobParameters.add(booleanParam(name:"RUN_${suite.suite}",defaultValue:"${suite.defaultValue}",description:"set to false do exclude ${suite.suite} from parallel run test suites."),)
 }
+properties([
+parameters(jobParameters)
+])
 
-properties([parameters(jobParameters)])
-
-pipeline {
-    agent any
-
-    stages {
-        stage('Initialize parallel E2E Test Run') {
-            steps {
-                script {
-                    env.ENVIRONMENT_NAME = params?.ENVIRONMENT?.toLowerCase() ?: env.BUILD_USER
-                    echo "ENVIRONMENT_NAME: ${env.ENVIRONMENT_NAME}"
-                    echo "BUILD_USER: ${env.BUILD_USER}"
-                }
-            }
-        }
-
-        stage('Trigger Parallel Runs') {
-            steps {
-                script {
-                    def SUITES_TO_RUN = GRADLE_SUITE_OPTIONS
-                    def parallelJobs = [:]
-
-                    SUITES_TO_RUN.each { def suite ->
-                        echo "Checking suite: ${suite.suite}"
-                        if (params."RUN_${suite.suite}") {
-                            echo "Adding suite to parallelJobs: ${suite.suite}"
-                            parallelJobs[suite.suite] = {
-                                stage(suite.suite) {
-                                    echo "Starting job for suite: ${suite.suite}"
-                                    build job: 'mom test', wait: false, parameters: [
-                                        booleanParam(name: 'myVariable', value: false)
-                                    ]
-                                    echo "Job for suite: ${suite.suite} has been triggered."
-                                }
-                            }
-                        }
-                    }
-
-                    echo "parallelJobs keys: ${parallelJobs.keySet()}"
-
-                    if (parallelJobs.isEmpty()) {
-                        echo "No suites to run."
-                    } else {
-                        echo "Triggering parallel jobs."
-                        parallel parallelJobs
-                    }
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            script {
-                echo "Pipeline execution completed."
-            }
-        }
-    }
+pipeline{
+agent any
+stages{
+stage('Initialize parallel E2E Test Run'){
+steps{
+script{
+env.ENVIRONMENT_NAME=params?.ENVIRONMENT?.toLowerCase()?:env.BUILD_USER
+echo "${env.ENVIRONMENT_NAME}"
+echo "${env.BUILD_USER}"
+}
+}
+}
+stage('Trigger Parallel Runs')
+{
+steps{
+script{
+def SUITES_TO_RUN=GRADLE_SUITE_OPTIONS
+def parallelJobs = [:]
+SUITES_TO_RUN.each{def suite->
+if(params."RUN_${suite.suite}"){
+parallelJobs[suite.suite] = {
+echo "${suite.suite}"
+build job: 'mom test',wait:false,parameters:[booleanParam(name:'myVariable', value:false)]
+  echo "Job for suite: ${suite.suite} has been triggered."
+                               }
+                  }
+ }
+ echo "parallelJobs: ${parallelJobs}"
+ if (parallelJobs.isEmpty()) {
+                         echo "No suites to run."
+                     } else {
+                         parallel parallelJobs
+                     }
+}
+}
+}}
+post{
+always{
+script{
+echo "Finally reached"
+}
+}
+}
 }
