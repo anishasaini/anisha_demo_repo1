@@ -7,5 +7,5 @@ def call(String stageName)
     else if ("${stageName}"=="print")
     {
         echo "welcome to learn"
-    }5
+    }
 }
